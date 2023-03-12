@@ -1,10 +1,7 @@
 
 import pytesseract
-import datetime
-import pandas as pd
 import cv2
-import cv2
-import numpy as np
+
 
 
 
@@ -58,8 +55,12 @@ def Predict_the_Name_of_Student(test_value, dataset):
     return max_idx
 
 
-
+l2 = []
 dataset = ['XXXXXX', 'Afzal', 'Sumit', 'Nigel', 'Abhay', 'Cyril']
 for i in range(len(words)):
     max1 = Predict_the_Name_of_Student(words[i], dataset)
     print(dataset[max1])
+    if dataset[max1]!='XXXXXX':
+        l2.append(dataset[max1])
+
+print(l2)
