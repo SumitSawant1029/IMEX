@@ -3,25 +3,65 @@ import mysql.connector
 import datetime
 import pandas as pd
 # import openpyxl as pd
-def databaseinsertion(date,name):
-    current_date = datetime.date.today()
 
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        passwd="Sumit@1029",
-        database="DB2"
-    )
-    mycursor = mydb.cursor()
+# def addDates(x):
+#     def addcolumns(dates):
+#         mydb = mysql.connector.connect(
+#             host="localhost",
+#             user="root",
+#             password="Sumit@1029",
+#             database="db2"
+#         )
+#
+#         mycursor = mydb.cursor()
+#
+#         # Generate the SQL query to add a new column for each date
+#         for date in dates:
+#             sql = "ALTER TABLE attendance ADD COLUMN `{}` VARCHAR(10)".format(date)
+#
+#             # Execute the SQL query
+#             mycursor.execute(sql)
+#
+#         # Commit the changes to the database
+#         mydb.commit()
+#
+#         # Close the cursor and the database connection
+#         mycursor.close()
+#         mydb.close()
+#
+#     # Example usage
+#     dates = []
+#     dates.append(x)
+#     addcolumns(dates)
+#
+# addDates('12-12-2019')
 
-    # mycursor.execute("CREATE DATABASE DB2")
-    # mycursor.execute("CREATE TABLE attendance (name VARCHAR(20))")
-    sqlformula = "INSERT INTO attendance (name) VALUES ('Afzal')"
-    mycursor.execute(sqlformula)
+def addpresenty():
+    def present(dates):
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Sumit@1029",
+            database="db2"
+        )
 
-    df = pd.read_sql("SELECT * FROM attendance", con=mydb)
+        mycursor = mydb.cursor()
 
-    # converting database to Excel
-    df.to_excel("output.xlsx", index=False)
+        # Generate the SQL query to add a new column for each date
+        for date in dates:
+            sql = "UPDATE attendance SET 12-12-2019 = P WHERE name = `{}`".format(date)
 
-databaseinsertion()
+            # Execute the SQL query
+            mycursor.execute(sql)
+
+        # Commit the changes to the database
+        mydb.commit()
+
+        # Close the cursor and the database connection
+        mycursor.close()
+        mydb.close()
+
+    dates = ['Afzal']
+
+    present(dates)
+addpresenty()
