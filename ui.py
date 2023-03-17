@@ -51,20 +51,13 @@ def Secondui():
     root = tk.Tk()
     root.iconbitmap('images/icon.ico')
     root.title('IMEX')
-    root.geometry('900x550')
+    root.geometry('350x550')
     root.config(bg='white')
 
 
 
     lab2 = Label(root,text='Upload your file Here',font=("Arial",19),bg="white",fg="gray")
-    # lab2.place(x=90,y=400)
     lab2.place(x=45,y=100)
-    # Creating a button with built-in options
-
-
-    edit_button = tk.Button(root, text="Edit Previous Records", bg="#E05959", fg="white", font=("Arial", 12))
-    edit_button.config(borderwidth=2, relief="groove")
-    edit_button.place(x=400, y=50)
 
     maxdate = date.today()
     mindate = date(2023,1,1)
@@ -80,22 +73,31 @@ def Secondui():
     upload_button.place(x=30,y=150,width=250,height=250)
     x = openfile(1)
 
+    img1 = Image.open("images/edit.jpg")
+    img1 = img1.resize((30,30))
+    photo11 = ImageTk.PhotoImage(img1)
+    upload_button1 = Button(root, image=photo11, highlightcolor='#111111', borderwidth=0, command=lambda: openfile(0))
+    upload_button1.place(x=300, y=20, width=30, height=30)
+
     lab1 = Label(root,text='Specify The Date:',bg='white',fg='gray')
     lab1.place(x=65,y=427)
     #logo
     image = Image.open("images/logo1.jpg")
     image= image.resize((150,75))
     photo = ImageTk.PhotoImage(image)
-
     label = Label(root, image=photo,borderwidth=0)
     label.place(x=80,y=10)
+
+    img2 = Image.open("images/Adddata.jpg")
+    img2 = img2.resize((30, 30))
+    photo2 = ImageTk.PhotoImage(img2)
+    upload_button1 = Button(root, img2=photo11, highlightcolor='#111111', borderwidth=0, command=lambda: openfile(0))
+    upload_button1.place(x=300, y=20, width=30, height=30)
 
     print(x)
     sub_button = tk.Button(root, text="Submit", bg="#E05959", fg="white",state= 'active' ,font=("Arial", 12),command=lambda:on_submitbuttonClicked(root))
     sub_button.config(borderwidth=2, relief="groove", width=25)
     sub_button.place(x=50, y=485)
-
-
 
     root.mainloop()
 
@@ -110,6 +112,6 @@ def thirdui(x):
     label = Label(root, text='heloooo')
     label.place(x=80, y=10)
     root.mainloop()
-firstui()
+# firstui()
 Secondui()
 
