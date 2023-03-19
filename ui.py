@@ -8,6 +8,7 @@ from tkvideo import tkvideo
 
 filepath=''
 f=1
+y=''
 def firstui():
     root = tk.Tk()
     root.geometry('700x500+500+200')
@@ -26,6 +27,15 @@ def firstui():
     lblVideo.after(2000,lblVideo.master.destroy)
 
     root.mainloop()
+
+def getdate(x):
+    global y
+    if x != 0:
+        y = x.get()
+        print(y)
+        return y
+    else :
+        return y
 def openfile(e):
     global filepath
     global f
@@ -74,6 +84,7 @@ def Secondui():
 
     date_entry = DateEntry(root, width=15,font=("Helvetica", 16), background='darkblue',foreground='white', borderwidth=2,maxdate=maxdate,mindate=mindate )
     date_entry.place(x=65,y=450)
+    getdate(date_entry)
 
     img = Image.open("images/upload1.jpg")
     img = img.resize((250,250))
@@ -102,6 +113,7 @@ def Secondui():
     photo2 = ImageTk.PhotoImage(img2)
     upload_button1 = Button(root, image=photo2, highlightcolor='#111111', borderwidth=0)
     upload_button1.place(x=300, y=60, width=30, height=30)
+
     sub_button = tk.Button(root, text="Submit", bg="#E05959", fg="white",font=("Arial", 12),command=lambda:on_submitbuttonClicked(root))
     sub_button.config(borderwidth=2, relief="groove", width=25)
     sub_button.place(x=50, y=485)

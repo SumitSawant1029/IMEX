@@ -3,17 +3,18 @@ import pytesseract
 import cv2
 import ui
 
-
 ui.firstui()
 ui.Secondui()
+
+# Getting File Path
 x = ui.openfile(1)
+# Getting Date
+date1 = ui.getdate(0)
+
 if x != '':
-    ## Fetch the image from respective Directory ##
     image = cv2.imread(x)
     image = cv2.resize(image, (500, 500))
-    ## Convert image into RGB values from BGR ##
-
-    ## pytesseract works good so ##
+    #Convert image into RGB values from BGR
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     l1 = pytesseract.image_to_string(image)
 
@@ -53,10 +54,18 @@ if x != '':
 
 
     l2 = []
-    dataset = ['XXXXXX', 'Afzal', 'Sumit', 'Nigel', 'Abhay', 'Cyril','Prakhar']
+    dataset = ['XXXXXX', 'Afzal', 'Sumit Sandeep Sawant', 'Nigel', 'Abhay', 'Cyril','Prakhar']
     for i in range(len(words)):
         max1 = Predict_the_Name_of_Student(words[i], dataset)
         if dataset[max1] != 'XXXXXX':
             l2.append(dataset[max1])
 
-    print(l2)
+    new_list = []
+
+    for item in l2:
+        if item not in new_list:
+            new_list.append(item)
+
+    print(new_list)
+    print(date1)
+
