@@ -1,3 +1,4 @@
+import time
 import tkinter as tk
 from datetime import date
 from tkinter import *
@@ -23,9 +24,10 @@ def ConvertDatabasetoExcel():
 
     # Close the database connection
     conn.close()
-def thirdui(x):
+def thirdui():
     ConvertDatabasetoExcel()
     def Openfile():
+        time.sleep(3)
         os.startfile("Attendance.xlsx")
     def DownloadFile():
         pass
@@ -123,7 +125,7 @@ def Secondui():
             date1 = x.get()
             x = openfile(1)
             root.destroy()
-            thirdui(x)
+
     root = tk.Tk()
     root.geometry('350x550+500+200')
     root.iconbitmap('images/icon.ico')
@@ -252,7 +254,7 @@ def AddDataToDatabase(date1,StudentList):
         cursor = conn.cursor()
 
         # Execute the ALTER TABLE statement to add the new column
-        cursor.execute("ALTER TABLE Attendance1 ADD COLUMN '{}' TEXT".format(date1))
+        cursor.execute("ALTER TABLE Attendance1 ADD COLUMN '{}' TEXT  DEFAULT 'ABSENT' ".format(date1))
 
         # Commit the changes to the database
         conn.commit()
@@ -279,10 +281,7 @@ def AddDataToDatabase(date1,StudentList):
         conn.close()
 
 AddDataToDatabase(date1,new_list)
-
-
-
-
+thirdui()
 
 
 
