@@ -2,7 +2,7 @@ import tkinter as tk
 from datetime import date
 from tkinter import *
 from tkinter import filedialog, messagebox
-
+import os
 import openpyxl as openpyxl
 from tkcalendar import *
 from PIL import ImageTk,Image
@@ -25,7 +25,10 @@ def ConvertDatabasetoExcel():
     conn.close()
 def thirdui(x):
     ConvertDatabasetoExcel()
-
+    def Openfile():
+        os.startfile("Attendance.xlsx")
+    def DownloadFile():
+        pass
     root = tk.Tk()
     root.geometry('350x550+500+200')
     root.iconbitmap('images/icon.ico')
@@ -72,7 +75,7 @@ def thirdui(x):
     image1 = Image.open("images/Openbutton.png")
     image1 = image1.resize((200, 100))
     photo3 = ImageTk.PhotoImage(image1)
-    Open_button = tk.Button(root, image=photo3, borderwidth=0, bg='white')
+    Open_button = tk.Button(root, image=photo3, borderwidth=0, bg='white',command=Openfile)
     Open_button.config(borderwidth=2, relief="groove")
     Open_button.place(x=65, y=420)
     root.mainloop()
