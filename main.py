@@ -1,10 +1,11 @@
 import time
 import tkinter as tk
+from tkinter import ttk
 from datetime import date
 from tkinter import *
 from tkinter import filedialog, messagebox
 import os
-import openpyxl as openpyxl
+
 from tkcalendar import *
 from PIL import ImageTk,Image
 from tkvideo import tkvideo
@@ -13,6 +14,43 @@ filepath=''
 import cv2
 import pytesseract
 import pandas as pd
+def moveback(x):
+    x.destroy()
+    Secondui()
+
+def EditDatabase(x):
+    x.destroy()
+    root = tk.Tk()
+    root.geometry('800x800')
+    Back_Button = Button(root,text='BACK',command=lambda:moveback(root))
+    Back_Button.pack()
+    treeview = ttk.Treeview(root)
+    conn = sqlite3.connect("IMEX.db")
+    cur = conn.cursor()
+    cur.execute("PRAGMA table_info(Attendance1)")
+    columns = [column[1] for column in cur.fetchall()]
+    treeview["columns"] = columns
+    for column in columns:
+        treeview.heading(column, text=column)
+
+    cur.execute("SELECT * FROM Attendance1")
+    rows = cur.fetchall()
+
+    for row in rows:
+        treeview.insert("", tk.END, values=row)
+
+    scrollbar = tk.Scrollbar(root, orient="horizontal", command=treeview.xview)
+    treeview.configure(xscrollcommand=scrollbar.set)
+
+    # Set the repeatdelay and repeatinterval options for the scrollbar
+
+    scrollbar.config(troughcolor='white', bd=0, highlightthickness=0, repeatdelay=100, repeatinterval=50)
+
+    # Configure the scrollbar range based on the number of rows in the Treeview widget
+
+    scrollbar.pack(side="bottom", fill="x")
+    treeview.pack()
+    root.mainloop()
 def ConvertDatabasetoExcel():
     conn = sqlite3.connect('IMEX.db')
 
@@ -59,7 +97,7 @@ def thirdui():
     edit1 = Image.open("images/edit.jpg")
     edit1 = edit1.resize((30, 30))
     edit11 = ImageTk.PhotoImage(edit1)
-    edit_button1 = Button(root, image=edit11, highlightcolor='#111111', borderwidth=0)
+    edit_button1 = Button(root, image=edit11, highlightcolor='#111111', borderwidth=0 ,command= lambda:EditDatabase(root))
     edit_button1.place(x=300, y=20, width=30, height=30)
 
     image = Image.open("images/logo1.jpg")
@@ -160,7 +198,7 @@ def Secondui():
     edit1 = Image.open("images/edit.jpg")
     edit1 = edit1.resize((30,30))
     edit11 = ImageTk.PhotoImage(edit1)
-    edit_button1 = Button(root, image=edit11, highlightcolor='#111111', borderwidth=0)
+    edit_button1 = Button(root, image=edit11, highlightcolor='#111111', borderwidth=0,command=lambda:EditDatabase(root))
     edit_button1.place(x=300, y=20, width=30, height=30)
 
     datelab1 = Label(root,text='Specify The Date:',bg='white',fg='gray')
