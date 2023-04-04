@@ -50,6 +50,57 @@ def EditDatabase(x):
 
     scrollbar.pack(side="bottom", fill="x")
     treeview.pack()
+
+    # Connect to the database
+    conn = sqlite3.connect('IMEX.db')
+    cursor = conn.cursor()
+
+    # Retrieve data from the database
+    cursor.execute('SELECT * FROM Attendance1')
+    rows = cursor.fetchall()
+
+    # Create a Tkinter window
+
+    root.title("Choice Entry Field Example")
+
+    # Create a label
+    label = tk.Label(root, text="Select a name:")
+
+    # Create a choice entry field
+    choices = [row[0] for row in rows]
+    var = tk.StringVar(value=choices[0])
+    entry = tk.OptionMenu(root, var, *choices)
+
+    # Pack the label and choice entry field
+    label.place(x=200,y=400)
+    entry.place(x=280,y=395)
+
+
+
+    # Close the database connection
+    cursor.close()
+    conn.close()
+    # _______________________________________________________________________________________________________________________________________-
+    conn = sqlite3.connect('IMEX.db')
+    c = conn.cursor()
+
+    c.execute('SELECT * FROM Date')
+    options = c.fetchall()
+    # Create label
+    label1 = tk.Label(root, text="Select an option:")
+
+    # Create dropdown menu with options from database column
+    variable = tk.StringVar(root)
+    variable.set(options[0][0])  # Set default option
+    dropdown = tk.OptionMenu(root, variable, *options)
+
+    # Pack label and dropdown menu into window
+    label1.place(x=300,y=395)
+    dropdown.place(x=300,y=395)
+    conn.close()
+    #________________________________________________________________________________________________________________________________________
+    #Add Present and Absent Code?????????
+    #________________________________________________________________________________________________________________________________________
     root.mainloop()
 def ConvertDatabasetoExcel():
     conn = sqlite3.connect('IMEX.db')
@@ -151,7 +202,7 @@ def firstui():
 
     root.mainloop()
 
-# firstui()
+firstui()
 
 def Secondui():
     def openfile(e):
@@ -234,7 +285,7 @@ def Secondui():
     sub_button.place(x=50, y=485)
 
     root.mainloop()
-# Secondui()
+Secondui()
 # print(filepath)
 # print(date1)
 
@@ -331,7 +382,7 @@ def AddDataToDatabase(date1,StudentList):
          # Close the database connection
         conn.close()
 
-# AddDataToDatabase(date1,new_list)
+AddDataToDatabase(date1,new_list)
 thirdui()
 
 
