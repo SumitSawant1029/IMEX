@@ -267,6 +267,7 @@ def thirdui():
     AddDataToDatabase(date1, new_list)
     #--------------------------------------------------------------------------------------------------------------------
     ConvertDatabasetoExcel()
+
     def Openfile():
         time.sleep(1)
         os.startfile("Attendance.xlsx")
@@ -286,7 +287,7 @@ def thirdui():
     root.geometry('%dx%d+%d+%d' % (width, height, x, y))
     root.config(bg='white')
     root.resizable(False, False)
-
+    messagebox.showwarning("", "Your Data Is Successfully Added")
     lab2 = Label(root, text='Download your file Here', font=("Arial", 19), bg="white", fg="gray")
     lab2.place(x=45, y=100)
 
