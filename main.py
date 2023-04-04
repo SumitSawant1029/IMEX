@@ -65,7 +65,7 @@ def ConvertDatabasetoExcel():
 def thirdui():
     ConvertDatabasetoExcel()
     def Openfile():
-        time.sleep(3)
+        time.sleep(1)
         os.startfile("Attendance.xlsx")
     def DownloadFile():
         pass
@@ -97,27 +97,40 @@ def thirdui():
     edit1 = Image.open("images/edit.jpg")
     edit1 = edit1.resize((30, 30))
     edit11 = ImageTk.PhotoImage(edit1)
+
     edit_button1 = Button(root, image=edit11, highlightcolor='#111111', borderwidth=0 ,command= lambda:EditDatabase(root))
     edit_button1.place(x=300, y=20, width=30, height=30)
 
     image = Image.open("images/logo1.jpg")
     image = image.resize((150, 75))
     photo = ImageTk.PhotoImage(image)
+
     label = Label(root, image=photo, borderwidth=0)
     label.place(x=80, y=10)
 
     img2 = Image.open("images/Adddata.jpg")
     img2 = img2.resize((30, 30))
     photo2 = ImageTk.PhotoImage(img2)
+
     upload_button1 = Button(root, image=photo2, highlightcolor='#111111', borderwidth=0)
     upload_button1.place(x=300, y=60, width=30, height=30)
 
-    image1 = Image.open("images/Openbutton.png")
-    image1 = image1.resize((200, 100))
+    image1 = Image.open("images/Openbutton.jpg")
+    image1 = image1.resize((50,50))
     photo3 = ImageTk.PhotoImage(image1)
-    Open_button = tk.Button(root, image=photo3, borderwidth=0, bg='white',command=Openfile)
+
+    Open_button = tk.Button(root, image=photo3, borderwidth=0,highlightcolor='#111111',command=Openfile)
     Open_button.config(borderwidth=2, relief="groove")
     Open_button.place(x=65, y=420)
+
+    image11 = Image.open("images/Back.png")
+    image11 = image11.resize((50, 50))
+    photo31 = ImageTk.PhotoImage(image11)
+
+    Back_button = tk.Button(root, image=photo31, borderwidth=0, highlightcolor='#111111', command=lambda : moveback(root))
+    Back_button.config(borderwidth=2, relief="groove")
+    Back_button.place(x=225, y=420)
+
     root.mainloop()
 def firstui():
     root = tk.Tk()
@@ -138,7 +151,7 @@ def firstui():
 
     root.mainloop()
 
-firstui()
+# firstui()
 
 def Secondui():
     def openfile(e):
@@ -221,7 +234,7 @@ def Secondui():
     sub_button.place(x=50, y=485)
 
     root.mainloop()
-Secondui()
+# Secondui()
 # print(filepath)
 # print(date1)
 
@@ -318,7 +331,7 @@ def AddDataToDatabase(date1,StudentList):
          # Close the database connection
         conn.close()
 
-AddDataToDatabase(date1,new_list)
+# AddDataToDatabase(date1,new_list)
 thirdui()
 
 
