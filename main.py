@@ -5,16 +5,15 @@ from datetime import date
 from tkinter import *
 from tkinter import filedialog, messagebox
 import os
-
 from tkcalendar import *
 from PIL import ImageTk,Image
 from tkvideo import tkvideo
 import sqlite3
-filepath=''
 import cv2
 import pytesseract
 import pandas as pd
 
+filepath=''
 def ModifyDatabase(name,date,status,x):
     try:
         conn = sqlite3.connect('IMEX.db')
@@ -28,13 +27,10 @@ def ModifyDatabase(name,date,status,x):
         EditDatabase(x)
     except:
         messagebox.showerror("Wrong Crediantials","Please Enter Valid Inputs")
-
 def moveback(x):
     x.destroy()
     filepath=''
     Secondui()
-
-
 def DeleteColumnDatabase(date,x):
     try:
         conn = sqlite3.connect('IMEX.db')
@@ -49,8 +45,6 @@ def DeleteColumnDatabase(date,x):
         EditDatabase(x)
     except:
         messagebox.showerror("Wrong Crediantials","Please Enter Valid Inputs")
-
-
 def EditDatabase(x):
     x.destroy()
     root = tk.Tk()
@@ -359,9 +353,6 @@ def firstui():
     lblVideo.after(2000,lblVideo.master.destroy)
 
     root.mainloop()
-
-firstui()
-
 def Secondui():
 
     def openfile(e):
@@ -443,9 +434,10 @@ def Secondui():
     sub_button.place(x=50, y=485)
 
     root.mainloop()
+
+
+firstui()
 Secondui()
-# print(filepath)
-# print(date1)
 
 
 
