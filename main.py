@@ -14,16 +14,48 @@ filepath=''
 import cv2
 import pytesseract
 import pandas as pd
+
+def ModifyDatabase(name,date,status,x):
+    try:
+        conn = sqlite3.connect('IMEX.db')
+        cursor = conn.cursor()
+
+        # Retrieve data from the database
+        cursor.execute("UPDATE Attendance1 SET '{}' = '{}' WHERE Name = '{}';".format(date.get(),status.get(),name.get()))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        EditDatabase(x)
+    except:
+        messagebox.showerror("Wrong Crediantials","Please Enter Valid Inputs")
+
 def moveback(x):
     x.destroy()
     Secondui()
+
+
+def DeleteColumnDatabase(date,x):
+    try:
+        conn = sqlite3.connect('IMEX.db')
+        cursor = conn.cursor()
+
+        # Retrieve data from the database
+        cursor.execute("ALTER TABLE Attendance1 DROP COLUMN '{}';".format(date.get()))
+        cursor.execute("DELETE FROM Date WHERE dates = '{}';".format(date.get()))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        EditDatabase(x)
+    except:
+        messagebox.showerror("Wrong Crediantials","Please Enter Valid Inputs")
+
 
 def EditDatabase(x):
     x.destroy()
     root = tk.Tk()
     root.geometry('800x800')
-    Back_Button = Button(root,text='BACK',command=lambda:moveback(root))
-    Back_Button.pack()
+    Back_Button = Button(root,text='BACK',width=30,command=lambda:moveback(root))
+    Back_Button.place(x=200,y=600)
     treeview = ttk.Treeview(root)
     conn = sqlite3.connect("IMEX.db")
     cur = conn.cursor()
@@ -48,9 +80,9 @@ def EditDatabase(x):
 
     # Configure the scrollbar range based on the number of rows in the Treeview widget
 
-    scrollbar.pack(side="bottom", fill="x")
+    scrollbar.pack(side="top", fill="x")
     treeview.pack()
-
+#----------------------------------------------------------------------------------------------------------------------------------------------
     # Connect to the database
     conn = sqlite3.connect('IMEX.db')
     cursor = conn.cursor()
@@ -73,34 +105,66 @@ def EditDatabase(x):
 
     # Pack the label and choice entry field
     label.place(x=200,y=400)
-    entry.place(x=280,y=395)
-
-
+    entry.place(x=280,y=400)
 
     # Close the database connection
     cursor.close()
     conn.close()
-    # _______________________________________________________________________________________________________________________________________-
+#__________________________________________________________________________
     conn = sqlite3.connect('IMEX.db')
-    c = conn.cursor()
+    cursor = conn.cursor()
 
-    c.execute('SELECT * FROM Date')
-    options = c.fetchall()
-    # Create label
-    label1 = tk.Label(root, text="Select an option:")
+    # Retrieve data from the database
+    cursor.execute('SELECT * FROM Date')
+    rows = cursor.fetchall()
 
-    # Create dropdown menu with options from database column
-    variable = tk.StringVar(root)
-    variable.set(options[0][0])  # Set default option
-    dropdown = tk.OptionMenu(root, variable, *options)
+    # Create a Tkinter window
 
-    # Pack label and dropdown menu into window
-    label1.place(x=300,y=395)
-    dropdown.place(x=300,y=395)
+    root.title("Choice Entry Field Example")
+
+    # Create a label
+    label1 = tk.Label(root, text="Select a date:")
+
+    # Create a choice entry field
+    choices1 = [row[0] for row in rows]
+    var1 = tk.StringVar(value=choices1[0])
+    entry1 = tk.OptionMenu(root, var1, *choices1)
+
+    # Pack the label and choice entry field
+    label1.place(x=200, y=450)
+    entry1.place(x=280, y=450)
+
+    # Close the database connection
+    cursor.close()
     conn.close()
-    #________________________________________________________________________________________________________________________________________
-    #Add Present and Absent Code?????????
-    #________________________________________________________________________________________________________________________________________
+#________________________________________________________________________________________________________________________________________
+    label = tk.Label(root, text="Attendance:")
+
+
+# Pack label and radio button group into window
+    options = ["PRESENT", "ABSENT"]
+
+    # Set the default option
+    default = tk.StringVar(root)
+    default.set(options[0])
+
+    # Create the dropdown menu
+    dropdown1 = tk.OptionMenu(root, default, *options)
+    dropdown1.place(x=280,y=500)
+    label.place(x=200,y=500)
+
+#________________________________________________________________________________________________________________________________________
+
+
+    Modify_Button=Button(root,text='Modify',width=30,command=lambda :ModifyDatabase(var,var1,default,root))
+    Modify_Button.place(x=200,y=550)
+
+    DeleteColumn_Button = Button(root, text='Delete', width=30, command=lambda: DeleteColumnDatabase(var1,root))
+    DeleteColumn_Button.place(x=200, y=650)
+
+
+
+#_______________________________________________________________________________________________________________________________________
     root.mainloop()
 def ConvertDatabasetoExcel():
     conn = sqlite3.connect('IMEX.db')
@@ -227,6 +291,7 @@ def Secondui():
             date1 = x.get()
             x = openfile(1)
             root.destroy()
+            thirdui()
 
     root = tk.Tk()
     root.geometry('350x550+500+200')
@@ -357,6 +422,7 @@ def AddDataToDatabase(date1,StudentList):
 
         # Execute the ALTER TABLE statement to add the new column
         cursor.execute("ALTER TABLE Attendance1 ADD COLUMN '{}' TEXT  DEFAULT 'ABSENT' ".format(date1))
+        cursor.execute("INSERT INTO Date VALUES ('{}');".format(date1))
 
         # Commit the changes to the database
         conn.commit()
@@ -374,7 +440,7 @@ def AddDataToDatabase(date1,StudentList):
         cursor = conn.cursor()
 
         # Execute the ALTER TABLE statement to add the new column
-        cursor.execute("UPDATE Attendance1 SET '{}' = 'Present' WHERE Name = '{}'".format(date1,StudentList[i]))
+        cursor.execute("UPDATE Attendance1 SET '{}' = 'PRESENT' WHERE Name = '{}'".format(date1,StudentList[i]))
 
         # Commit the changes to the database
         conn.commit()
@@ -383,7 +449,6 @@ def AddDataToDatabase(date1,StudentList):
         conn.close()
 
 AddDataToDatabase(date1,new_list)
-thirdui()
 
 
 
