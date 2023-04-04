@@ -11,6 +11,6 @@ Pandas
 Numpy
 Installation
 Install Python 3.x from the official website.
-Install OpenCV, Pytesseract, Pandas, and Numpy using the following pip command:
+Install OpenCV, Pytesseract, Pandas, and Numpy 
 
 This project was created by Sumit Sawant . Feel free to use and modify the code for your own purposes.
