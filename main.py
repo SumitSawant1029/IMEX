@@ -31,6 +31,7 @@ def ModifyDatabase(name,date,status,x):
 
 def moveback(x):
     x.destroy()
+    filepath=''
     Secondui()
 
 
@@ -178,6 +179,99 @@ def ConvertDatabasetoExcel():
     # Close the database connection
     conn.close()
 def thirdui():
+    if filepath != '':
+        image = cv2.imread(filepath)
+        image = cv2.resize(image, (500, 500))
+        # Convert image into RGB values from BGR
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        l1 = pytesseract.image_to_string(image)
+
+        ## Detecting Words ##
+        heightImage, weightImage, _ = image.shape
+        boxes = pytesseract.image_to_data(image)
+
+        for x, b in enumerate(boxes.splitlines()):
+            if x != 0:
+                b = b.split()
+                # print(b)
+                if len(b) == 12:
+                    x, y, w, h = int(b[6]), int(b[7]), int(b[8]), int(b[9])
+                    cv2.rectangle(image, (x, y), (w + x, h + y), (0, 0, 255), 3)
+                    cv2.putText(image, b[11], (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (20, 30, 255), 2)
+
+        cv2.waitKey(0)
+
+        words = l1.split('\n')
+        print(words)
+
+        def Predict_the_Name_of_Student(test_value, dataset):
+            scores = []
+
+            for element in dataset:
+                score = sum([1 for i, j in zip(test_value, element) if i == j])
+                scores.append(score)
+
+            max_val = scores[0]  # initialize max_val to the first element of the list
+            max_idx = 0  # initialize max_idx to 0
+            for i in range(1, len(scores)):
+                if scores[i] > max_val:
+                    max_val = scores[i]
+                    max_idx = i
+            return max_idx
+
+        l2 = []
+        dataset = ['XXXXXX', 'Afzal', 'Sumit', 'Nigel', 'Abhay', 'Cyril', 'Prakhar']
+        for i in range(len(words)):
+            max1 = Predict_the_Name_of_Student(words[i], dataset)
+            if dataset[max1] != 'XXXXXX':
+                l2.append(dataset[max1])
+
+        new_list = []
+
+        for item in l2:
+            if item not in new_list:
+                new_list.append(item)
+
+        print(new_list)
+
+    def AddDataToDatabase(date1, StudentList):
+
+        try:
+            # Connect to the database
+            conn = sqlite3.connect('IMEX.db')
+
+            # Get a cursor object
+            cursor = conn.cursor()
+
+            # Execute the ALTER TABLE statement to add the new column
+            cursor.execute("ALTER TABLE Attendance1 ADD COLUMN '{}' TEXT  DEFAULT 'ABSENT' ".format(date1))
+            cursor.execute("INSERT INTO Date VALUES ('{}');".format(date1))
+
+            # Commit the changes to the database
+            conn.commit()
+
+            # Close the database connection
+            conn.close()
+        except:
+            print("Column Already Exist")
+
+        for i in range(0, len(StudentList)):
+            conn = sqlite3.connect('IMEX.db')
+
+            # Get a cursor object
+            cursor = conn.cursor()
+
+            # Execute the ALTER TABLE statement to add the new column
+            cursor.execute("UPDATE Attendance1 SET '{}' = 'PRESENT' WHERE Name = '{}'".format(date1, StudentList[i]))
+
+            # Commit the changes to the database
+            conn.commit()
+
+            # Close the database connection
+            conn.close()
+
+    AddDataToDatabase(date1, new_list)
+    #--------------------------------------------------------------------------------------------------------------------
     ConvertDatabasetoExcel()
     def Openfile():
         time.sleep(1)
@@ -269,24 +363,23 @@ def firstui():
 firstui()
 
 def Secondui():
+
     def openfile(e):
         global filepath
-        global f
 
         if e == 0:
             filepath = filedialog.askopenfilename(filetypes=(("JPG", "*.jpg"), ("PNG", "*.png")))
-            if filepath != '':
-                f = 0
             if filepath == '':
                 messagebox.showerror("Error", "You Have Not Uploaded Anything")
             else:
                 m = 'The file You Uploaded is ' + filepath
                 messagebox.showwarning("File ", m)
-
     def on_submitbuttonClicked(x):
-        if f != 0:
+        if filepath == '':
             messagebox.showerror('Error', "You Have Not Uploaded Anything")
         else:
+            message = "The File You Submitted is " + filepath
+            messagebox.showwarning('Something',message)
             global date1
             date1 = x.get()
             x = openfile(1)
@@ -354,101 +447,8 @@ Secondui()
 # print(filepath)
 # print(date1)
 
-if filepath != '':
-    image = cv2.imread(filepath)
-    image = cv2.resize(image, (500, 500))
-    #Convert image into RGB values from BGR
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    l1 = pytesseract.image_to_string(image)
-
-    ## Detecting Words ##
-    heightImage, weightImage, _ = image.shape
-    boxes = pytesseract.image_to_data(image)
-
-    for x, b in enumerate(boxes.splitlines()):
-        if x != 0:
-            b = b.split()
-            # print(b)
-            if len(b) == 12:
-                x, y, w, h = int(b[6]), int(b[7]), int(b[8]), int(b[9])
-                cv2.rectangle(image, (x, y), (w + x, h + y), (0, 0, 255), 3)
-                cv2.putText(image, b[11], (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (20, 30, 255), 2)
-
-    cv2.waitKey(0)
-
-    words = l1.split('\n')
-    print(words)
 
 
-    def Predict_the_Name_of_Student(test_value, dataset):
-        scores = []
-
-        for element in dataset:
-            score = sum([1 for i, j in zip(test_value, element) if i == j])
-            scores.append(score)
-
-        max_val = scores[0]  # initialize max_val to the first element of the list
-        max_idx = 0  # initialize max_idx to 0
-        for i in range(1, len(scores)):
-            if scores[i] > max_val:
-                max_val = scores[i]
-                max_idx = i
-        return max_idx
-
-
-    l2 = []
-    dataset = ['XXXXXX', 'Afzal', 'Sumit', 'Nigel', 'Abhay', 'Cyril','Prakhar']
-    for i in range(len(words)):
-        max1 = Predict_the_Name_of_Student(words[i], dataset)
-        if dataset[max1] != 'XXXXXX':
-            l2.append(dataset[max1])
-
-    new_list = []
-
-    for item in l2:
-        if item not in new_list:
-            new_list.append(item)
-
-    print(new_list)
-
-def AddDataToDatabase(date1,StudentList):
-
-    try:
-        # Connect to the database
-        conn = sqlite3.connect('IMEX.db')
-
-        # Get a cursor object
-        cursor = conn.cursor()
-
-        # Execute the ALTER TABLE statement to add the new column
-        cursor.execute("ALTER TABLE Attendance1 ADD COLUMN '{}' TEXT  DEFAULT 'ABSENT' ".format(date1))
-        cursor.execute("INSERT INTO Date VALUES ('{}');".format(date1))
-
-        # Commit the changes to the database
-        conn.commit()
-
-        # Close the database connection
-        conn.close()
-    except :
-        print("Column Already Exist")
-
-    for i in range(0,len(StudentList)):
-
-        conn = sqlite3.connect('IMEX.db')
-
-        # Get a cursor object
-        cursor = conn.cursor()
-
-        # Execute the ALTER TABLE statement to add the new column
-        cursor.execute("UPDATE Attendance1 SET '{}' = 'PRESENT' WHERE Name = '{}'".format(date1,StudentList[i]))
-
-        # Commit the changes to the database
-        conn.commit()
-
-         # Close the database connection
-        conn.close()
-
-AddDataToDatabase(date1,new_list)
 
 
 
