@@ -14,6 +14,73 @@ import pytesseract
 import pandas as pd
 
 filepath=''
+
+def Addstudent(x):
+    x.destroy()
+    def AddNameStudent(x):
+        import sqlite3
+
+        # Connect to database
+        conn = sqlite3.connect('IMEX.db')
+        c = conn.cursor()
+
+        # Execute a SELECT statement
+        c.execute('SELECT * FROM NamesOfStudents')
+
+        # Retrieve all rows as a list
+        rows = c.fetchall()
+
+        # Close the cursor and connection
+        c.close()
+        conn.close()
+
+        rows_list = [list(row) for row in rows]
+        name_list = [name[0] for name in rows_list]
+        g=1
+        for i in range(0,len(name_list)):
+            if name_list[i]==x.get():
+                g = 0
+        #_____________________________________________________________________________________________________
+        if g == 1:
+            conn = sqlite3.connect('IMEX.db')
+            cursor = conn.cursor()
+
+            # Retrieve data from the database
+            cursor.execute("INSERT INTO NamesOfStudents VALUES ('{}')".format(x.get()))
+            conn.commit()
+            # Close the database connection
+            cursor.close()
+            conn.close()
+        else :
+            message = x.get() + " Already Exist "
+            messagebox.showerror("Error",message)
+
+
+    root = tk.Tk()
+    root.geometry('350x550+500+200')
+    root.iconbitmap('images/icon.ico')
+    root.title('IMEX')
+
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    width = 350
+    height = 550
+    x = (screen_width / 2) - (width / 2)
+    y = (screen_height / 2) - (height / 2)
+    root.geometry('%dx%d+%d+%d' % (width, height, x, y))
+    root.config(bg='white')
+    root.resizable(False, False)
+
+    label1 = Label(root,text= "Enter The Name Of Student")
+    label1.pack()
+    entry = Entry(root,width=25)
+    entry.pack()
+    button = Button(root,text="Submit",command=lambda : AddNameStudent(entry))
+    button.pack()
+
+
+    root.mainloop()
+
 def ModifyDatabase(name,date,status,x):
     try:
         conn = sqlite3.connect('IMEX.db')
@@ -64,6 +131,7 @@ def EditDatabase(x):
     rows = cur.fetchall()
 
     for row in rows:
+        print(row)
         treeview.insert("", tk.END, values=row)
 
     scrollbar = tk.Scrollbar(root, orient="horizontal", command=treeview.xview)
@@ -77,7 +145,8 @@ def EditDatabase(x):
 
     scrollbar.pack(side="top", fill="x")
     treeview.pack()
-#----------------------------------------------------------------------------------------------------------------------------------------------
+
+    #----------------------------------------------------------------------------------------------------------------------------------------------
     # Connect to the database
     conn = sqlite3.connect('IMEX.db')
     cursor = conn.cursor()
@@ -94,7 +163,7 @@ def EditDatabase(x):
     label = tk.Label(root, text="Select a name:")
 
     # Create a choice entry field
-    choices = [row[0] for row in rows]
+    choices = [row[1] for row in rows]
     var = tk.StringVar(value=choices[0])
     entry = tk.OptionMenu(root, var, *choices)
 
@@ -214,7 +283,27 @@ def thirdui():
             return max_idx
 
         l2 = []
-        dataset = ['XXXXXX', 'Afzal', 'Sumit', 'Nigel', 'Abhay', 'Cyril', 'Prakhar']
+#__________________________Add Database Names
+        conn = sqlite3.connect('IMEX.db')
+        c = conn.cursor()
+
+        # Execute a SELECT statement
+        c.execute('SELECT * FROM NamesOfStudents')
+
+        # Retrieve all rows as a list
+        rows = c.fetchall()
+
+        # Close the cursor and connection
+        c.close()
+        conn.close()
+
+        rows_list = [list(row) for row in rows]
+        name_list = [name[0] for name in rows_list]
+        dataset1 = ['XXXXXX']
+        dataset = dataset1 + name_list
+
+#____________Added Dataset Of Students through Database
+        print(dataset)
         for i in range(len(words)):
             max1 = Predict_the_Name_of_Student(words[i], dataset)
             if dataset[max1] != 'XXXXXX':
@@ -316,7 +405,7 @@ def thirdui():
     img2 = img2.resize((30, 30))
     photo2 = ImageTk.PhotoImage(img2)
 
-    upload_button1 = Button(root, image=photo2, highlightcolor='#111111', borderwidth=0)
+    upload_button1 = Button(root, image=photo2, highlightcolor='#111111', borderwidth=0,command=lambda :Addstudent(root))
     upload_button1.place(x=300, y=60, width=30, height=30)
 
     image1 = Image.open("images/Openbutton.jpg")
@@ -427,7 +516,7 @@ def Secondui():
     img2 = Image.open("images/Adddata.jpg")
     img2 = img2.resize((30, 30))
     photo2 = ImageTk.PhotoImage(img2)
-    upload_button1 = Button(root, image=photo2, highlightcolor='#111111', borderwidth=0)
+    upload_button1 = Button(root, image=photo2, highlightcolor='#111111', borderwidth=0,command=lambda :Addstudent(root))
     upload_button1.place(x=300, y=60, width=30, height=30)
 
     sub_button = tk.Button(root, text="Submit", bg="#E05959", fg="white",font=("Arial", 12),command=lambda :on_submitbuttonClicked(date_entry))
@@ -435,8 +524,6 @@ def Secondui():
     sub_button.place(x=50, y=485)
 
     root.mainloop()
-
-
 firstui()
 Secondui()
 
