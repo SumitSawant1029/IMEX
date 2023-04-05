@@ -14,7 +14,7 @@ import pytesseract
 import pandas as pd
 
 filepath=''
-
+# To Add New Students As A Dataset In Database And Comparision With Detected Names
 def Addstudent(x):
     x.destroy()
     def AddNameStudent(x):
@@ -80,7 +80,7 @@ def Addstudent(x):
 
 
     root.mainloop()
-
+# To Modify If Any Error Occur We can Modify The Output
 def ModifyDatabase(name,date,status,x):
     try:
         conn = sqlite3.connect('IMEX.db')
@@ -94,10 +94,13 @@ def ModifyDatabase(name,date,status,x):
         EditDatabase(x)
     except:
         messagebox.showerror("Wrong Crediantials","Please Enter Valid Inputs")
+# Just To Move To The Previous UI
 def moveback(x):
     x.destroy()
     filepath=''
     Secondui()
+
+#TO Delete A Column Of Attendance
 def DeleteColumnDatabase(date,x):
     try:
         conn = sqlite3.connect('IMEX.db')
@@ -112,6 +115,7 @@ def DeleteColumnDatabase(date,x):
         EditDatabase(x)
     except:
         messagebox.showerror("Wrong Crediantials","Please Enter Valid Inputs")
+
 def EditDatabase(x):
     x.destroy()
     root = tk.Tk()
@@ -230,6 +234,7 @@ def EditDatabase(x):
 
 #_______________________________________________________________________________________________________________________________________
     root.mainloop()
+# To Convert Database to Excel
 def ConvertDatabasetoExcel():
     conn = sqlite3.connect('IMEX.db')
 
@@ -241,6 +246,11 @@ def ConvertDatabasetoExcel():
 
     # Close the database connection
     conn.close()
+
+
+
+
+# FrontEnd With Some Backend
 def thirdui():
     if filepath != '':
         image = cv2.imread(filepath)
