@@ -22,23 +22,22 @@ def Addstudent(x):
 
         # Connect to database
         conn = sqlite3.connect('IMEX.db')
-        c = conn.cursor()
+        cursor = conn.cursor()
 
-        # Execute a SELECT statement
-        c.execute('SELECT * FROM NamesOfStudents')
-
-        # Retrieve all rows as a list
-        rows = c.fetchall()
-
-        # Close the cursor and connection
-        c.close()
+        # Retrieve data from the database
+        cursor.execute("SELECT * FROM Attendance1")
+        rows = cursor.fetchall()
+        print(rows)
+        L1 = []
+        for i in range(0, len(rows)):
+            L1.append(rows[i][1])
+        print(L1)
+        conn.commit()
+        cursor.close()
         conn.close()
-
-        rows_list = [list(row) for row in rows]
-        name_list = [name[0] for name in rows_list]
         g=1
-        for i in range(0,len(name_list)):
-            if name_list[i]==x.get():
+        for i in range(0,len(rows)):
+            if x.get()==L1[i]:
                 g = 0
         #_____________________________________________________________________________________________________
         if g == 1:
@@ -46,7 +45,7 @@ def Addstudent(x):
             cursor = conn.cursor()
 
             # Retrieve data from the database
-            cursor.execute("INSERT INTO NamesOfStudents VALUES ('{}')".format(x.get()))
+            cursor.execute("INSERT INTO Attendance1 (Name) VALUES ('{}')".format(x.get()))
             conn.commit()
             # Close the database connection
             cursor.close()
@@ -99,7 +98,6 @@ def moveback(x):
     x.destroy()
     filepath=''
     Secondui()
-
 #TO Delete A Column Of Attendance
 def DeleteColumnDatabase(date,x):
     try:
@@ -115,7 +113,6 @@ def DeleteColumnDatabase(date,x):
         EditDatabase(x)
     except:
         messagebox.showerror("Wrong Crediantials","Please Enter Valid Inputs")
-
 def EditDatabase(x):
     x.destroy()
     root = tk.Tk()
@@ -246,10 +243,6 @@ def ConvertDatabasetoExcel():
 
     # Close the database connection
     conn.close()
-
-
-
-
 # FrontEnd With Some Backend
 def thirdui():
     if filepath != '':
@@ -295,23 +288,22 @@ def thirdui():
         l2 = []
 #__________________________Add Database Names
         conn = sqlite3.connect('IMEX.db')
-        c = conn.cursor()
+        cursor = conn.cursor()
 
-        # Execute a SELECT statement
-        c.execute('SELECT * FROM NamesOfStudents')
-
-        # Retrieve all rows as a list
-        rows = c.fetchall()
-
-        # Close the cursor and connection
-        c.close()
+        # Retrieve data from the database
+        cursor.execute("SELECT * FROM Attendance1")
+        rows = cursor.fetchall()
+        print(rows)
+        L1 = []
+        for i in range(0, len(rows)):
+            L1.append(rows[i][1])
+        print(L1)
+        conn.commit()
+        cursor.close()
         conn.close()
-
-        rows_list = [list(row) for row in rows]
-        name_list = [name[0] for name in rows_list]
         dataset1 = ['XXXXXX']
-        dataset = dataset1 + name_list
-
+        dataset = dataset1 + L1
+        print(dataset)
 #____________Added Dataset Of Students through Database
         print(dataset)
         for i in range(len(words)):

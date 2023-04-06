@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="70faa55c-cce6-4e48-a1d2-70b43b4fbf3c" name="Changes" comment="Added Database Names from comparision of identified values" />
+    <list default="true" id="70faa55c-cce6-4e48-a1d2-70b43b4fbf3c" name="Changes" comment="Commenting The Project">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Attendance.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Attendance.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMEX.db" beforeDir="false" afterPath="$PROJECT_DIR$/IMEX.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/samples/test14.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/samples/test14.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/thirdui.py" beforeDir="false" afterPath="$PROJECT_DIR$/thirdui.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -144,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680700954306</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Commenting The Project">
+      <created>1680701221736</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1680701221736</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,6 +178,7 @@
     <MESSAGE value="Database and error solved" />
     <MESSAGE value="Final" />
     <MESSAGE value="Added Database Names from comparision of identified values" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Database Names from comparision of identified values" />
+    <MESSAGE value="Commenting The Project" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commenting The Project" />
   </component>
 </project>
