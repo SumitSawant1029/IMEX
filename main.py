@@ -317,7 +317,7 @@ def thirdui():
         conn.close()
         dataset1 = ['XXXXXX']
         dataset = dataset1 + L1
-#____________Added Dataset Of Students through Database
+#____________Added Dataset Of Students through Databaseiy
 
         for i in range(len(words)):
             max1 = Predict_the_Name_of_Student(words[i], dataset)
