@@ -338,11 +338,11 @@ def thirdui():
 
             # Get a cursor object
             cursor = conn.cursor()
-            print("Hello")
+
             # Execute the ALTER TABLE statement to add the new column
             cursor.execute("ALTER TABLE Attendance1 ADD COLUMN '{}' TEXT  DEFAULT 'ABSENT' ".format(date1))
             cursor.execute("INSERT INTO Date VALUES ('{}');".format(date1))
-            print("Hello1")
+
             # Commit the changes to the database
             conn.commit()
 
