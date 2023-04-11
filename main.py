@@ -17,7 +17,7 @@ filepath=''
 # To Add New Students As A Dataset In Database And Comparision With Detected Names
 def Addstudent(x):
     x.destroy()
-    def AddNameStudent(x):
+    def AddNameStudent(x,y):
         import sqlite3
 
         # Connect to database
@@ -27,17 +27,17 @@ def Addstudent(x):
         # Retrieve data from the database
         cursor.execute("SELECT * FROM Attendance1")
         rows = cursor.fetchall()
-        print(rows)
+
         L1 = []
         for i in range(0, len(rows)):
-            L1.append(rows[i][1])
-        print(L1)
+            L1.append(rows[i][0])
+
         conn.commit()
         cursor.close()
         conn.close()
         g=1
         for i in range(0,len(rows)):
-            if x.get()==L1[i]:
+            if y.get()==L1[i]:
                 g = 0
         #_____________________________________________________________________________________________________
         if g == 1:
@@ -45,14 +45,20 @@ def Addstudent(x):
             cursor = conn.cursor()
 
             # Retrieve data from the database
-            cursor.execute("INSERT INTO Attendance1 (Name) VALUES ('{}')".format(x.get()))
+            cursor.execute("INSERT INTO Attendance1 (RollNo,Name) VALUES ('{}','{}')".format(y.get(),x.get()))
             conn.commit()
             # Close the database connection
             cursor.close()
             conn.close()
+            message = x.get() + " Added Successfully"
+            messagebox.showinfo("Success", message)
+            x.delete(0,"end")
+            y.delete(0, "end")
         else :
             message = x.get() + " Already Exist "
             messagebox.showerror("Error",message)
+            x.delete(0, "end")
+            y.delete(0, "end")
 
 
     root = tk.Tk()
@@ -71,11 +77,18 @@ def Addstudent(x):
     root.resizable(False, False)
 
     label1 = Label(root,text= "Enter The Name Of Student")
-    label1.pack()
+    label1.place(x=50,y=80)
     entry = Entry(root,width=25)
-    entry.pack()
-    button = Button(root,text="Submit",command=lambda : AddNameStudent(entry))
+    entry.place(x=200,y=80)
+    label12 = Label(root, text="Enter The Roll No")
+    label12.place(x=50,y=50)
+    entry_rollNo = Entry(root, width=25)
+    entry_rollNo.place(x=200,y=50)
+    button = Button(root,text="Submit",command=lambda : AddNameStudent(entry,entry_rollNo))
     button.pack()
+
+    button1 = Button(root, text="Back", command=lambda: moveback(root))
+    button1.pack()
 
 
     root.mainloop()
@@ -132,7 +145,7 @@ def EditDatabase(x):
     rows = cur.fetchall()
 
     for row in rows:
-        print(row)
+
         treeview.insert("", tk.END, values=row)
 
     scrollbar = tk.Scrollbar(root, orient="horizontal", command=treeview.xview)
@@ -259,7 +272,7 @@ def thirdui():
         for x, b in enumerate(boxes.splitlines()):
             if x != 0:
                 b = b.split()
-                # print(b)
+
                 if len(b) == 12:
                     x, y, w, h = int(b[6]), int(b[7]), int(b[8]), int(b[9])
                     cv2.rectangle(image, (x, y), (w + x, h + y), (0, 0, 255), 3)
@@ -268,8 +281,9 @@ def thirdui():
         cv2.waitKey(0)
 
         words = l1.split('\n')
+        for i in range(len(words)):
+            words[i] = ''.join(words[i].split())
         print(words)
-
         def Predict_the_Name_of_Student(test_value, dataset):
             scores = []
 
@@ -293,19 +307,18 @@ def thirdui():
         # Retrieve data from the database
         cursor.execute("SELECT * FROM Attendance1")
         rows = cursor.fetchall()
-        print(rows)
+
         L1 = []
         for i in range(0, len(rows)):
             L1.append(rows[i][1])
-        print(L1)
+
         conn.commit()
         cursor.close()
         conn.close()
         dataset1 = ['XXXXXX']
         dataset = dataset1 + L1
-        print(dataset)
 #____________Added Dataset Of Students through Database
-        print(dataset)
+
         for i in range(len(words)):
             max1 = Predict_the_Name_of_Student(words[i], dataset)
             if dataset[max1] != 'XXXXXX':
@@ -318,20 +331,18 @@ def thirdui():
                 new_list.append(item)
 
         print(new_list)
-
     def AddDataToDatabase(date1, StudentList):
-
         try:
             # Connect to the database
             conn = sqlite3.connect('IMEX.db')
 
             # Get a cursor object
             cursor = conn.cursor()
-
+            print("Hello")
             # Execute the ALTER TABLE statement to add the new column
             cursor.execute("ALTER TABLE Attendance1 ADD COLUMN '{}' TEXT  DEFAULT 'ABSENT' ".format(date1))
             cursor.execute("INSERT INTO Date VALUES ('{}');".format(date1))
-
+            print("Hello1")
             # Commit the changes to the database
             conn.commit()
 
@@ -340,20 +351,20 @@ def thirdui():
         except:
             print("Column Already Exist")
 
-        for i in range(0, len(StudentList)):
-            conn = sqlite3.connect('IMEX.db')
+        conn = sqlite3.connect('IMEX.db')
 
-            # Get a cursor object
-            cursor = conn.cursor()
+        # Get a cursor object
+        cursor = conn.cursor()
+        for i in range(0, len(StudentList)):
 
             # Execute the ALTER TABLE statement to add the new column
             cursor.execute("UPDATE Attendance1 SET '{}' = 'PRESENT' WHERE Name = '{}'".format(date1, StudentList[i]))
 
-            # Commit the changes to the database
-            conn.commit()
+        # Commit the changes to the database
+        conn.commit()
 
-            # Close the database connection
-            conn.close()
+        # Close the database connection
+        conn.close()
 
     AddDataToDatabase(date1, new_list)
     #--------------------------------------------------------------------------------------------------------------------
@@ -485,20 +496,20 @@ def Secondui():
     root.resizable(False, False)
 
     lab2 = Label(root,text='Upload your file Here',font=("Arial",19),bg="white",fg="gray")
-    lab2.place(x=45,y=100)
+    lab2.place(x=50,y=175)
 
     maxdate = date.today()
     mindate = date(2023,1,1)
 
     date_entry = DateEntry(root, width=15,font=("Helvetica", 16), background='darkblue',foreground='white', borderwidth=2,maxdate=maxdate,mindate=mindate )
-    date_entry.place(x=65,y=450)
+    date_entry.place(x=65,y=125)
 
     img = Image.open("images/upload1.jpg")
     img = img.resize((250,250))
     photo1 = ImageTk.PhotoImage(img)
 
     upload_button = Button(root,image=photo1,highlightcolor='#111111',borderwidth=0,command=lambda:openfile(0))
-    upload_button.place(x=45,y=150,width=250,height=250)
+    upload_button.place(x=45,y=225,width=250,height=250)
 
     edit1 = Image.open("images/edit.jpg")
     edit1 = edit1.resize((30,30))
@@ -507,7 +518,7 @@ def Secondui():
     edit_button1.place(x=300, y=20, width=30, height=30)
 
     datelab1 = Label(root,text='Specify The Date:',bg='white',fg='gray')
-    datelab1.place(x=65,y=427)
+    datelab1.place(x=65,y=100)
 
     image = Image.open("images/logo1.jpg")
     image= image.resize((150,75))
