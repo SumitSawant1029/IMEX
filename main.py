@@ -286,79 +286,46 @@ def ConvertDatabasetoExcel():
 # FrontEnd With Some Backend
 def thirdui():
     if filepath != '':
+        ## Python-tesseract is an optical character recognition (OCR) tool for python ##
+        pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+
+        ## Fetch the image from respective Directory ##
         image = cv2.imread(filepath)
-        image = cv2.resize(image, (500, 500))
-        # Convert image into RGB values from BGR
+
+        ## Convert image into RGB values from BGR ##
+        ## pytesseract works good so ##
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        l1 = pytesseract.image_to_string(image)
-        print(l1)
-        ## Detecting Words ##
+        print(pytesseract.image_to_string(image))
+
+        ## Detecting Digits ##
         heightImage, weightImage, _ = image.shape
-        boxes = pytesseract.image_to_data(image)
+        ## Configuration to detect digits from images ##
+        cong = r"--oem 3 --psm 6 outputbase digits"
+        boxes = pytesseract.image_to_boxes(image, config=cong)
 
-        for x, b in enumerate(boxes.splitlines()):
-            if x != 0:
-                b = b.split()
+        ## Create an empty list to store detected digits
+        detected_digits = []
 
-                if len(b) == 12:
-                    x, y, w, h = int(b[6]), int(b[7]), int(b[8]), int(b[9])
-                    cv2.rectangle(image, (x, y), (w + x, h + y), (0, 0, 255), 3)
-                    cv2.putText(image, b[11], (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (20, 30, 255), 2)
+        ## Forming bounding box around digits and storing the detected digits in a list
+        for b in boxes.splitlines():
+            b = b.split(" ")
 
+            x, y, w, h = int(b[1]), int(b[2]), int(b[3]), int(b[4])
+            cv2.rectangle(image, (x, heightImage - y), (w, heightImage - h), (0, 0, 255), 3)
+            detected_digit = b[0]
+            detected_digits.append(detected_digit)
+            cv2.putText(image, detected_digit, (x, heightImage - y + 25), cv2.FONT_HERSHEY_COMPLEX, 1, (20, 30, 255), 2)
+
+        ## Print the list of detected digits
+        print(detected_digits)
+
+        cv2.imshow("Detecting Digits", image)
         cv2.waitKey(0)
-        print(boxes)
-        words = l1.split('\n')
-        for i in range(len(words)):
-            words[i] = ''.join(words[i].split())
-        print(words)
-        def Predict_the_Name_of_Student(test_value, dataset):
-            scores = []
 
-            for element in dataset:
-                score = sum([1 for i, j in zip(test_value, element) if i == j])
-                scores.append(score)
 
-            max_val = scores[0]  # initialize max_val to the first element of the list
-            max_idx = 0  # initialize max_idx to 0
-            for i in range(1, len(scores)):
-                if scores[i] > max_val:
-                    max_val = scores[i]
-                    max_idx = i
-            return max_idx
-
-        l2 = []
-#__________________________Add Database Names
-        conn = sqlite3.connect('IMEX.db')
-        cursor = conn.cursor()
-
-        # Retrieve data from the database
-        cursor.execute("SELECT * FROM Attendance1")
-        rows = cursor.fetchall()
-
-        L1 = []
-        for i in range(0, len(rows)):
-            L1.append(rows[i][1])
-
-        conn.commit()
-        cursor.close()
-        conn.close()
-        dataset1 = ['XXXXXX']
-        dataset = dataset1 + L1
 #____________Added Dataset Of Students through Databaseiy
 
-        for i in range(len(words)):
-            max1 = Predict_the_Name_of_Student(words[i], dataset)
-            if dataset[max1] != 'XXXXXX':
-                l2.append(dataset[max1])
-
-        new_list = []
-
-        for item in l2:
-            if item not in new_list:
-                new_list.append(item)
-
-        print(new_list)
-    def AddDataToDatabase(date1, StudentList):
+    def AddDataToDatabase(date1, Rollno):
         try:
             # Connect to the database
             conn = sqlite3.connect('IMEX.db')
@@ -382,10 +349,10 @@ def thirdui():
 
         # Get a cursor object
         cursor = conn.cursor()
-        for i in range(0, len(StudentList)):
+        for i in range(0, len(Rollno)):
 
             # Execute the ALTER TABLE statement to add the new column
-            cursor.execute("UPDATE Attendance1 SET '{}' = 'PRESENT' WHERE Name = '{}'".format(date1, StudentList[i]))
+            cursor.execute("UPDATE Attendance1 SET '{}' = 'PRESENT' WHERE RollNo = '{}'".format(date1, Rollno[i]))
 
         # Commit the changes to the database
         conn.commit()
@@ -393,7 +360,7 @@ def thirdui():
         # Close the database connection
         conn.close()
 
-    AddDataToDatabase(date1, new_list)
+    AddDataToDatabase(date1, detected_digits)
     #--------------------------------------------------------------------------------------------------------------------
     ConvertDatabasetoExcel()
 
