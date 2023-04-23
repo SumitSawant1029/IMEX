@@ -360,7 +360,14 @@ def thirdui():
         # Close the database connection
         conn.close()
 
-    AddDataToDatabase(date1, detected_digits)
+    new_list = []
+
+    for elem in detected_digits:
+        if elem.isdigit() or (elem.startswith('-') and elem[1:].isdigit()):
+            new_list.append(int(elem))
+
+    print(new_list)
+    AddDataToDatabase(date1, new_list)
     #--------------------------------------------------------------------------------------------------------------------
     ConvertDatabasetoExcel()
 
