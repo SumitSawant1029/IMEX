@@ -12,7 +12,6 @@ import sqlite3
 import cv2
 import pytesseract
 import pandas as pd
-
 filepath=''
 # To Add New Students As A Dataset In Database And Comparision With Detected Names
 def Addstudent(x):
@@ -66,31 +65,37 @@ def Addstudent(x):
     root.iconbitmap('images/icon.ico')
     root.title('IMEX')
 
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
-    width = 350
-    height = 550
-    x = (screen_width / 2) - (width / 2)
-    y = (screen_height / 2) - (height / 2)
-    root.geometry('%dx%d+%d+%d' % (width, height, x, y))
-    root.config(bg='white')
+
+    root.geometry("500x600")
+    root.config(bg='#2b2929')
     root.resizable(False, False)
+    labelx = Label(root,text= "Student Details",bg="#2b2929",fg="white", font=('Arial',20))
+    labelx.place(x=150,y=15)
 
-    label1 = Label(root,text= "Enter The Name Of Student")
-    label1.place(x=50,y=80)
-    entry = Entry(root,width=25)
-    entry.place(x=200,y=80)
-    label12 = Label(root, text="Enter The Roll No")
-    label12.place(x=50,y=50)
-    entry_rollNo = Entry(root, width=25)
-    entry_rollNo.place(x=200,y=50)
-    button = Button(root,text="Submit",command=lambda : AddNameStudent(entry,entry_rollNo))
-    button.pack()
+    label1 = Label(root,text= "Name Of Student",bg="#2b2929",fg="white", font=('Arial',12))
+    label1.place(x=50,y=400)
 
-    button1 = Button(root, text="Back", command=lambda: moveback(root))
-    button1.pack()
+    entry = Entry(root,width=25, font=('Arial',12))
+    entry.place(x=200,y=400)
 
+    label12 = Label(root, text="Roll No",bg="#2b2929",fg="white", font=('Arial',12))
+    label12.place(x=50,y=450)
 
+    entry_rollNo = Entry(root, width=25, font=('Arial',12))
+    entry_rollNo.place(x=200,y=450)
+
+    button = Button(root,text="Add", font=('Arial',12),width=10,fg="light green",bg="#2b2929",command=lambda : AddNameStudent(entry,entry_rollNo))
+    button.place(x=200,y=500)
+
+    button1 = Button(root, text="Back", font=('Arial',12),width=10,fg="red",bg="#2b2929",command=lambda: moveback(root))
+    button1.place(x=325,y=500)
+
+    image = Image.open("images/Addstud.png")
+
+    photo = ImageTk.PhotoImage(image)
+    label9 = tk.Label(root, image=photo, bg="#2b2929", width=0)
+    label9.place(x=80, y=50)
+    # ___________________________
     root.mainloop()
 # To Modify If Any Error Occur We can Modify The Output
 def ModifyDatabase(name,date,status,x):
@@ -129,9 +134,15 @@ def DeleteColumnDatabase(date,x):
 def EditDatabase(x):
     x.destroy()
     root = tk.Tk()
-    root.geometry('800x800')
-    Back_Button = Button(root,text='BACK',width=30,command=lambda:moveback(root))
-    Back_Button.place(x=200,y=600)
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    root.title("Edit Data")
+    # Set the geometry of the main window to the screen size
+    root.geometry("%dx%d+0+0" % (screen_width, screen_height))
+
+    root.config(bg="white")
+
+
     treeview = ttk.Treeview(root)
     conn = sqlite3.connect("IMEX.db")
     cur = conn.cursor()
@@ -143,13 +154,13 @@ def EditDatabase(x):
 
     cur.execute("SELECT * FROM Attendance1")
     rows = cur.fetchall()
-
+    treeview.tag_configure('mytag', font=('Arial',12))
     for row in rows:
-
-        treeview.insert("", tk.END, values=row)
+        treeview.insert("", tk.END, values=row, tags=('mytag',))
 
     scrollbar = tk.Scrollbar(root, orient="horizontal", command=treeview.xview)
     treeview.configure(xscrollcommand=scrollbar.set)
+
 
     # Set the repeatdelay and repeatinterval options for the scrollbar
 
@@ -174,16 +185,16 @@ def EditDatabase(x):
     root.title("Choice Entry Field Example")
 
     # Create a label
-    label = tk.Label(root, text="Select a name:")
+    label = tk.Label(root, text="Select a name:",bg="white",font=('Arial',10))
 
     # Create a choice entry field
     choices = [row[1] for row in rows]
     var = tk.StringVar(value=choices[0])
     entry = tk.OptionMenu(root, var, *choices)
-
+    entry.config(width=20)
     # Pack the label and choice entry field
-    label.place(x=200,y=400)
-    entry.place(x=280,y=400)
+    label.place(x=300,y=400)
+    entry.place(x=400,y=400)
 
     # Close the database connection
     cursor.close()
@@ -201,23 +212,23 @@ def EditDatabase(x):
     root.title("Choice Entry Field Example")
 
     # Create a label
-    label1 = tk.Label(root, text="Select a date:")
+    label1 = tk.Label(root, text="Select a date:",bg="white",font=('Arial',10))
 
     # Create a choice entry field
     choices1 = [row[0] for row in rows]
     var1 = tk.StringVar(value=choices1[0])
     entry1 = tk.OptionMenu(root, var1, *choices1)
-
+    entry1.config(width=20)
     # Pack the label and choice entry field
-    label1.place(x=200, y=450)
-    entry1.place(x=280, y=450)
+    label1.place(x=300, y=450)
+    entry1.place(x=400, y=450)
 
     # Close the database connection
     cursor.close()
     conn.close()
-#________________________________________________________________________________________________________________________________________
-    label = tk.Label(root, text="Attendance:")
 
+#________________________________________________________________________________________________________________________________________
+    label = tk.Label(root, text="Attendance:",bg="white",font=('Arial',10))
 
 # Pack label and radio button group into window
     options = ["PRESENT", "ABSENT"]
@@ -228,20 +239,36 @@ def EditDatabase(x):
 
     # Create the dropdown menu
     dropdown1 = tk.OptionMenu(root, default, *options)
-    dropdown1.place(x=280,y=500)
-    label.place(x=200,y=500)
+    dropdown1.config(width=20)
 
+    dropdown1.place(x=400,y=500)
+    label.place(x=300,y=500)
 #________________________________________________________________________________________________________________________________________
+    Modify_Button=Button(root,text='Modify',width=10,bg="#5ACCD0",fg="white",font=('Arial', 10),command=lambda :ModifyDatabase(var,var1,default,root))
+    Modify_Button.place(x=300,y=575)
+
+    DeleteColumn_Button = Button(root, text='Delete Column', width=20,font=('Arial', 10), bg="#FF4040",command=lambda: DeleteColumnDatabase(var1,root))
+    DeleteColumn_Button.place(x=400, y=575)
+
+    img = Image.open("images/Back.png")
+    img = img.resize((50,50))
+    photo1 = ImageTk.PhotoImage(img)
+
+    Back_button = Button(root, image=photo1, highlightcolor='#111111', bg="white", borderwidth=0,command=lambda: moveback(root))
+    Back_button.place(x=225, y=320, width=50, height=50)
+
+    label3 = Label(root, text="Specify the Details",bg="white", fg="gray",font=('Arial', 25))
+    label3.place(x=300, y=325)
+
+    label32 = Label(root, text="Table View", bg="white", fg="gray", font=('Arial', 15))
+    label32.pack()
 
 
-    Modify_Button=Button(root,text='Modify',width=30,command=lambda :ModifyDatabase(var,var1,default,root))
-    Modify_Button.place(x=200,y=550)
 
-    DeleteColumn_Button = Button(root, text='Delete', width=30, command=lambda: DeleteColumnDatabase(var1,root))
-    DeleteColumn_Button.place(x=200, y=650)
-
-
-
+    image = Image.open("images/Editdata.png")
+    photo = ImageTk.PhotoImage(image)
+    label = tk.Label(root, image=photo,bg="white",width=0)
+    label.place(x=900,y=325)
 #_______________________________________________________________________________________________________________________________________
     root.mainloop()
 # To Convert Database to Excel
@@ -264,7 +291,7 @@ def thirdui():
         # Convert image into RGB values from BGR
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         l1 = pytesseract.image_to_string(image)
-
+        print(l1)
         ## Detecting Words ##
         heightImage, weightImage, _ = image.shape
         boxes = pytesseract.image_to_data(image)
@@ -279,7 +306,7 @@ def thirdui():
                     cv2.putText(image, b[11], (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (20, 30, 255), 2)
 
         cv2.waitKey(0)
-
+        print(boxes)
         words = l1.split('\n')
         for i in range(len(words)):
             words[i] = ''.join(words[i].split())
@@ -393,7 +420,7 @@ def thirdui():
     lab2 = Label(root, text='Download your file Here', font=("Arial", 19), bg="white", fg="gray")
     lab2.place(x=45, y=100)
 
-    img = Image.open("images/Downloadfile.png")
+    img = Image.open("images/Download.jpg")
     img = img.resize((300, 250))
     photo1 = ImageTk.PhotoImage(img)
 
@@ -421,21 +448,18 @@ def thirdui():
     upload_button1 = Button(root, image=photo2, highlightcolor='#111111', borderwidth=0,command=lambda :Addstudent(root))
     upload_button1.place(x=300, y=60, width=30, height=30)
 
-    image1 = Image.open("images/Openbutton.jpg")
-    image1 = image1.resize((50,50))
-    photo3 = ImageTk.PhotoImage(image1)
 
-    Open_button = tk.Button(root, image=photo3, borderwidth=0,highlightcolor='#111111',command=Openfile)
-    Open_button.config(borderwidth=2, relief="groove")
-    Open_button.place(x=65, y=420)
+    Open_button = tk.Button(root,text="Open", borderwidth=0,highlightcolor='#111111',width=20,height=1,bg="#FF5733",fg="white",font=("Arial", 15),command=Openfile)
+    Open_button.config(borderwidth=1, relief="groove")
+    Open_button.place(x=70, y=420)
 
-    image11 = Image.open("images/Back.png")
-    image11 = image11.resize((50, 50))
-    photo31 = ImageTk.PhotoImage(image11)
+    img = Image.open("images/Back.png")
+    img = img.resize((50, 50))
+    photox = ImageTk.PhotoImage(img)
 
-    Back_button = tk.Button(root, image=photo31, borderwidth=0, highlightcolor='#111111', command=lambda : moveback(root))
-    Back_button.config(borderwidth=2, relief="groove")
-    Back_button.place(x=225, y=420)
+    Back_button = Button(root, image=photox, highlightcolor='#111111', bg="white", borderwidth=0,command=lambda: moveback(root))
+    Back_button.place(x=15, y=30, width=50, height=50)
+
 
     root.mainloop()
 def firstui():
@@ -539,22 +563,3 @@ def Secondui():
     root.mainloop()
 firstui()
 Secondui()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

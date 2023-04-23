@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="70faa55c-cce6-4e48-a1d2-70b43b4fbf3c" name="Changes" comment="Final1">
+    <list default="true" id="70faa55c-cce6-4e48-a1d2-70b43b4fbf3c" name="Changes" comment="Final11">
+      <change afterPath="$PROJECT_DIR$/number.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Attendance.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Attendance.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IMEX.db" beforeDir="false" afterPath="$PROJECT_DIR$/IMEX.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Back.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/Back.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Downloadfile.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/Downloadfile.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -177,7 +180,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681183690777</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Final11">
+      <created>1681189704277</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1681189704277</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -200,17 +210,7 @@
     <MESSAGE value="Finallizing" />
     <MESSAGE value="Final" />
     <MESSAGE value="Final1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Final1" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>95</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Final11" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final11" />
   </component>
 </project>
