@@ -9,7 +9,7 @@ from tkcalendar import *
 from PIL import ImageTk,Image
 from tkvideo import tkvideo
 import sqlite3
-import cv2
+import cv2    #openv cv
 import pytesseract
 import pandas as pd
 filepath=''
